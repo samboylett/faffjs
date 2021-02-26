@@ -34,6 +34,123 @@ describe('FaffJS', () => {
             successFn = jest.fn().mockReturnValue('successValue');
         });
 
+        describe('requestAdapter', () => {
+            beforeEach(() => {
+                global.fetch = jest.fn().mockReturnValue('g');
+            });
+
+            it('calls fetch with supplied args', () => {
+                faff.requestAdapter(1, 'foo');
+
+                expect(fetch).toHaveBeenCalledWith(1, 'foo');
+            });
+
+            it('returns value from fetch', () => {
+                expect(faff.requestAdapter()).toEqual('g');
+            });
+        });
+
+        describe('request', () => {
+            let requestAdapterPromise;
+            let requestAdapterResolve;
+            let requestAdapterReject;
+            let retVal;
+
+            beforeEach(() => {
+                requestAdapterPromise = new Promise((resolve, reject) => {
+                    requestAdapterResolve = resolve;
+                    requestAdapterReject = reject;
+                });
+
+                faff.requestAdapter = jest.fn().mockReturnValue(requestAdapterPromise);
+
+                expect(faff.loadingCount).toBe(0);
+                expect(faff.loading).toBe(false);
+
+                retVal = faff.request(2, 'bar');
+            });
+
+            it('calls requestAdapter with supplied args', () => {
+                expect(faff.requestAdapter).toHaveBeenCalledWith(2, 'bar');
+            });
+
+            it('returns a promise', () => {
+                expect(retVal).toEqual(expect.any(Promise));
+            });
+
+            it('increase loading count', () => {
+                expect(faff.loadingCount).toBe(1);
+            });
+
+            it('sets loading state', () => {
+                expect(faff.loading).toBe(true);
+            });
+
+            describe('when another call', () => {
+                beforeEach(() => {
+                    faff.request();
+                });
+
+                it('increase loading count', () => {
+                    expect(faff.loadingCount).toBe(2);
+                });
+
+                it('maintains loading state', () => {
+                    expect(faff.loading).toBe(true);
+                });
+
+                describe('when both promises resolve', () => {
+                    beforeEach(() => {
+                        requestAdapterResolve();
+                    });
+
+                    it('decreases loading count', () => {
+                        expect(faff.loadingCount).toBe(0);
+                    });
+
+                    it('sets loading state', () => {
+                        expect(faff.loading).toBe(false);
+                    });
+                });
+            });
+
+            describe('when resolves', () => {
+                beforeEach(() => {
+                    requestAdapterResolve('f');
+                });
+
+                it('resolves to the value', async () => {
+                    await expect(retVal).resolves.toBe('f');
+                });
+
+                it('decreases loading count', () => {
+                    expect(faff.loadingCount).toBe(0);
+                });
+
+                it('sets loading state', () => {
+                    expect(faff.loading).toBe(false);
+                });
+            });
+
+            describe('when rejects', () => {
+                beforeEach(() => {
+                    requestAdapterReject('fd');
+                });
+
+                it('rejects to the value', async () => {
+                    await expect(retVal).rejects.toBe('fd');
+                });
+
+                it('decreases loading count', () => {
+                    expect(faff.loadingCount).toBe(0);
+                });
+
+                it('sets loading state', () => {
+                    expect(faff.loading).toBe(false);
+                });
+            });
+        });
+
         it('has an empty calls object', () => {
             expect(faff.actions).toEqual({});
         });
