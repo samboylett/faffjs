@@ -25,14 +25,25 @@ export default class FaffJS {
     }
 
     async dispatch(key, params = null) {
-        if (!this.actions[key]) {
+        const action = this.actions[key];
+
+        if (!action) {
             throw new FaffUnknownMethodError({ key });
         }
 
         const context = new FaffContext();
+        let value;
 
-        const value = await this.actions[key].request(context, params);
+        try {
+            value = await action.request(context, params);
+        } catch(e) {
+            throw action.error
+                ? action.error(context, e)
+                : e;
+        }
 
-        return value;
+        return action.success
+            ? action.success(context, value)
+            : value;
     }
 }

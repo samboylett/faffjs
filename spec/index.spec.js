@@ -12,6 +12,8 @@ describe('FaffJS', () => {
     let errorFn;
     let successFn;
 
+    const context = expect.any(FaffContext);
+
     it('is instantiable', () => {
         faff = new FaffJS();
 
@@ -28,8 +30,8 @@ describe('FaffJS', () => {
             });
 
             requestFn = jest.fn().mockReturnValue(requestFnPromise);
-            errorFn = jest.fn();
-            successFn = jest.fn();
+            errorFn = jest.fn().mockReturnValue('errorValue');
+            successFn = jest.fn().mockReturnValue('successValue');
         });
 
         it('has an empty calls object', () => {
@@ -116,7 +118,7 @@ describe('FaffJS', () => {
                     .rejects.toThrow(new errors.FaffUnknownMethodError({ key: 'bar' }));
             });
 
-            describe('when the method has no error function', () => {
+            describe('when the method has only request function', () => {
                 let retVal;
 
                 beforeEach(() => {
@@ -155,7 +157,7 @@ describe('FaffJS', () => {
                     });
 
                     it('calls the request function with context and argument as null', () => {
-                        expect(requestFn).toHaveBeenCalledWith(expect.any(FaffContext), null);
+                        expect(requestFn).toHaveBeenCalledWith(context, null);
                     });
 
                     noErrorFunctionTests();
@@ -167,10 +169,80 @@ describe('FaffJS', () => {
                     });
 
                     it('calls the request function with context and argument', () => {
-                        expect(requestFn).toHaveBeenCalledWith(expect.any(FaffContext), 'test');
+                        expect(requestFn).toHaveBeenCalledWith(context, 'test');
                     });
 
                     noErrorFunctionTests();
+                });
+            });
+
+            describe('when the method has all functions defined', () => {
+                let retVal;
+
+                beforeEach(() => {
+                    faff.add('foo', {
+                        request: requestFn,
+                        success: successFn,
+                        error: errorFn,
+                    });
+                });
+
+                const allFunctionTests = () => {
+                    it('returns a promise', () => {
+                        expect(retVal).toEqual(expect.any(Promise));
+                    });
+
+                    describe('when request function resolves', () => {
+                        beforeEach(() => {
+                            requestFnResolve('c');
+                        });
+
+                        it('calls success function with the value', async () => {
+                            expect(successFn).toHaveBeenCalledWith(context, 'c');
+                        });
+
+                        it('returned promise resolves with the success function return value', async () => {
+                            await expect(retVal).resolves.toBe('successValue');
+                        });
+                    });
+
+                    describe('when request function rejects', () => {
+                        beforeEach(() => {
+                            requestFnReject('d');
+                        });
+
+                        it('calls error function with the value', async () => {
+                            expect(errorFn).toHaveBeenCalledWith(context, 'd');
+                        });
+
+                        it('returned promise rejects with the error function return value', async () => {
+                            await expect(retVal).rejects.toBe('errorValue');
+                        });
+                    });
+                };
+
+                describe('when calling with no argument', () => {
+                    beforeEach(async () => {
+                        retVal = faff.dispatch('foo');
+                    });
+
+                    it('calls the request function with context and argument as null', () => {
+                        expect(requestFn).toHaveBeenCalledWith(context, null);
+                    });
+
+                    allFunctionTests();
+                });
+
+                describe('when calling with argument', () => {
+                    beforeEach(() => {
+                        retVal = faff.dispatch('foo', 'test');
+                    });
+
+                    it('calls the request function with context and argument', () => {
+                        expect(requestFn).toHaveBeenCalledWith(context, 'test');
+                    });
+
+                    allFunctionTests();
                 });
             });
         });
