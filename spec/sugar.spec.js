@@ -1,4 +1,6 @@
-import FaffJS from '../src/index';
+import FaffJS, {
+    FaffRequestController,
+} from '../src/index';
 
 describe('sugar', () => {
     let faff;
@@ -57,6 +59,52 @@ describe('sugar', () => {
         it('rejects to the expected value', async () => {
             await expect(faff.dispatch('foobar'))
                 .rejects.toEqual('rabfoo');
+        });
+    });
+
+    describe('class prototype success', () => {
+        class BasicRequest extends FaffRequestController {
+            request() {
+                return Promise.resolve({
+                    data: 'foo',
+                });
+            }
+
+            success(context, response) {
+                return response.data.toUpperCase();
+            }
+        }
+
+        beforeEach(() => {
+            faff.add('foobar', BasicRequest);
+        });
+
+        it('resolves to the expected value', async () => {
+            await expect(faff.dispatch('foobar'))
+                .resolves.toEqual('FOO');
+        });
+    });
+
+    describe('class prototype error', () => {
+        class BasicRequest extends FaffRequestController {
+            request() {
+                return Promise.reject({
+                    data: 'bar',
+                });
+            }
+
+            error(context, response) {
+                return response.data.toUpperCase();
+            }
+        }
+
+        beforeEach(() => {
+            faff.add('foobar', BasicRequest);
+        });
+
+        it('rejects to the expected value', async () => {
+            await expect(faff.dispatch('foobar'))
+                .rejects.toEqual('BAR');
         });
     });
 });

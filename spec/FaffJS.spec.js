@@ -169,11 +169,7 @@ describe('FaffJS', () => {
 
                 it('adds a call to the actions object', () => {
                     expect(faff.actions).toEqual({
-                        foo: {
-                            request: requestFn,
-                            error: null,
-                            success: null,
-                        },
+                        foo: expect.any(Function),
                     });
                 });
 
@@ -197,11 +193,7 @@ describe('FaffJS', () => {
 
                 it('adds a call to the actions object with an error function', () => {
                     expect(faff.actions).toEqual({
-                        foo: {
-                            request: requestFn,
-                            error: errorFn,
-                            success: null,
-                        },
+                        foo: expect.any(Function),
                     });
                 });
             });
@@ -215,11 +207,7 @@ describe('FaffJS', () => {
 
                 it('adds a call to the actions object with a success function', () => {
                     expect(faff.actions).toEqual({
-                        foo: {
-                            request: requestFn,
-                            error: errorFn,
-                            success: successFn,
-                        },
+                        foo: expect.any(Function),
                     });
                 });
             });
