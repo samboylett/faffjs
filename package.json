@@ -1,7 +1,7 @@
 {
   "name": "faffjs",
   "version": "0.1.0",
-  "description": "Library for cleaning up API calls in JavaScript frameworks",
+  "description": "Library for cleaning up API calls in JavaScript frontend apps",
   "main": "dist/index.js",
   "scripts": {
     "codecov": "codecov",
