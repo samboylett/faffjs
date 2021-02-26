@@ -6,20 +6,43 @@ import {
 import FaffContext from './FaffContext';
 import FaffRequestController from './FaffRequestController';
 
+/**
+ * Main class.
+ */
 export default class FaffJS {
+    /**
+     * Constructor.
+     */
     constructor() {
         this.actions = {};
         this.loadingCount = 0;
     }
 
+    /**
+     * See if any requests are loading or not.
+     *
+     * @returns {boolean}
+     */
     get loading() {
         return this.loadingCount > 0;
     }
 
+    /**
+     * Adapter request uses to call a fetching library. Can be overridden.
+     *
+     * @param {any[]} ...args
+     * @returns {any}
+     */
     requestAdapter(...args) {
         return fetch(...args);
     }
 
+    /**
+     * Do a HTTP request. Calls requestAdapter.
+     *
+     * @param {any[]} ...args
+     * @returns {any}
+     */
     async request(...args) {
         try {
             this.loadingCount++;
@@ -30,34 +53,32 @@ export default class FaffJS {
         }
     }
 
-    add(key, reqArg) {
+    /**
+     * Add an action.
+     *
+     * @param {string} key
+     * @param {FaffRequestControllerTemplate|FaffRequestController} controllerOrTemplate
+     * @returns {FaffJS}
+     */
+    add(key, controllerOrTemplate) {
         if (this.actions[key]) {
             throw new FaffCallAlreadyDefinedError({ key });
         }
 
-        if (FaffRequestController.isPrototypeOf(reqArg)) {
-            this.actions[key] = reqArg;
-        } else {
-            const { request, success = null, error = null } = reqArg;
-
-            this.actions[key] = class extends FaffRequestController {
-                request(...args) {
-                    return request(...args);
-                }
-
-                success(context, response) {
-                    return success ? success(context, response) : response;
-                }
-
-                error(context, response) {
-                    return error ? error(context, response) : response;
-                }
-            };
-        }
+        this.actions[key] = FaffRequestController.isPrototypeOf(controllerOrTemplate)
+            ? controllerOrTemplate
+            : FaffRequestController.build(controllerOrTemplate);
 
         return this;
     }
 
+    /**
+     * Dispatch a new action request.
+     *
+     * @param {string} key
+     * @param {any} params
+     * @returns {any}
+     */
     async dispatch(key, params = null) {
         const Controller = this.actions[key];
 

@@ -1,5 +1,8 @@
 {
   "env": {
     "jest": true,
+  },
+  "rules": {
+    "require-jsdoc-except/require-jsdoc": "off"
   }
 }
