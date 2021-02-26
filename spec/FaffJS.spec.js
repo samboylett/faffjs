@@ -119,7 +119,7 @@ describe('FaffJS', () => {
                     requestAdapterResolve('f');
                 });
 
-                it('resolves to the value', async () => {
+                it('resolves to the value', async() => {
                     await expect(retVal).resolves.toBe('f');
                 });
 
@@ -137,7 +137,7 @@ describe('FaffJS', () => {
                     requestAdapterReject('fd');
                 });
 
-                it('rejects to the value', async () => {
+                it('rejects to the value', async() => {
                     await expect(retVal).rejects.toBe('fd');
                 });
 
@@ -179,16 +179,14 @@ describe('FaffJS', () => {
 
                 it('throws if called with the same key', () => {
                     expect(() => {
-                        faff.add('foo', () => {});
+                        faff.add('foo', {});
                     }).toThrow(new errors.FaffCallAlreadyDefinedError({ key: 'foo' }));
                 });
             });
 
             describe('when called with an error function argument', () => {
-                let retVal;
-
                 beforeEach(() => {
-                    retVal = faff.add('foo', { request: requestFn, error: errorFn });
+                    faff.add('foo', { request: requestFn, error: errorFn });
                 });
 
                 it('adds a call to the actions object with an error function', () => {
@@ -199,10 +197,8 @@ describe('FaffJS', () => {
             });
 
             describe('when called with a success function argument', () => {
-                let retVal;
-
                 beforeEach(() => {
-                    retVal = faff.add('foo', { request: requestFn, error: errorFn, success: successFn });
+                    faff.add('foo', { request: requestFn, error: errorFn, success: successFn });
                 });
 
                 it('adds a call to the actions object with a success function', () => {
@@ -218,7 +214,7 @@ describe('FaffJS', () => {
                 expect(faff.dispatch).toEqual(expect.any(Function));
             });
 
-            it('throws when called with an unknown key', async () => {
+            it('throws when called with an unknown key', async() => {
                 await expect(faff.dispatch('bar'))
                     .rejects.toThrow(new errors.FaffUnknownMethodError({ key: 'bar' }));
             });
@@ -240,7 +236,7 @@ describe('FaffJS', () => {
                             requestFnResolve('a');
                         });
 
-                        it('returned promise resolves with the value', async () => {
+                        it('returned promise resolves with the value', async() => {
                             await expect(retVal).resolves.toBe('a');
                         });
                     });
@@ -250,14 +246,14 @@ describe('FaffJS', () => {
                             requestFnReject('b');
                         });
 
-                        it('returned promise rejects with the value', async () => {
+                        it('returned promise rejects with the value', async() => {
                             await expect(retVal).rejects.toBe('b');
                         });
                     });
                 };
 
                 describe('when calling with no argument', () => {
-                    beforeEach(async () => {
+                    beforeEach(async() => {
                         retVal = faff.dispatch('foo');
                     });
 
@@ -302,11 +298,11 @@ describe('FaffJS', () => {
                             requestFnResolve('c');
                         });
 
-                        it('calls success function with the value', async () => {
+                        it('calls success function with the value', async() => {
                             expect(successFn).toHaveBeenCalledWith(context, 'c');
                         });
 
-                        it('returned promise resolves with the success function return value', async () => {
+                        it('returned promise resolves with the success function return value', async() => {
                             await expect(retVal).resolves.toBe('successValue');
                         });
                     });
@@ -316,18 +312,18 @@ describe('FaffJS', () => {
                             requestFnReject('d');
                         });
 
-                        it('calls error function with the value', async () => {
+                        it('calls error function with the value', async() => {
                             expect(errorFn).toHaveBeenCalledWith(context, 'd');
                         });
 
-                        it('returned promise rejects with the error function return value', async () => {
+                        it('returned promise rejects with the error function return value', async() => {
                             await expect(retVal).rejects.toBe('errorValue');
                         });
                     });
                 };
 
                 describe('when calling with no argument', () => {
-                    beforeEach(async () => {
+                    beforeEach(async() => {
                         retVal = faff.dispatch('foo');
                     });
 

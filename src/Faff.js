@@ -74,7 +74,7 @@ export default class FaffJS {
         } catch(e) {
             context.error = e;
 
-            throw controller.error(context, e)
+            throw controller.error(context, e);
         }
 
         context.response = response;

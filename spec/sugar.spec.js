@@ -4,16 +4,9 @@ import FaffJS, {
 
 describe('sugar', () => {
     let faff;
-    let requestFn;
-    let errorFn;
-    let successFn;
 
     beforeEach(() => {
         faff = new FaffJS();
-
-        requestFn = jest.fn().mockReturnValue(Promise.resolve('ok'));
-        errorFn = jest.fn().mockReturnValue('errorValue');
-        successFn = jest.fn().mockReturnValue('successValue');
     });
 
     describe('basic success', () => {
@@ -33,7 +26,7 @@ describe('sugar', () => {
             });
         });
 
-        it('resolves to the expected value', async () => {
+        it('resolves to the expected value', async() => {
             await expect(faff.dispatch('foobar'))
                 .resolves.toEqual('rabbar');
         });
@@ -56,7 +49,7 @@ describe('sugar', () => {
             });
         });
 
-        it('rejects to the expected value', async () => {
+        it('rejects to the expected value', async() => {
             await expect(faff.dispatch('foobar'))
                 .rejects.toEqual('rabfoo');
         });
@@ -79,7 +72,7 @@ describe('sugar', () => {
             faff.add('foobar', BasicRequest);
         });
 
-        it('resolves to the expected value', async () => {
+        it('resolves to the expected value', async() => {
             await expect(faff.dispatch('foobar'))
                 .resolves.toEqual('FOO');
         });
@@ -102,7 +95,7 @@ describe('sugar', () => {
             faff.add('foobar', BasicRequest);
         });
 
-        it('rejects to the expected value', async () => {
+        it('rejects to the expected value', async() => {
             await expect(faff.dispatch('foobar'))
                 .rejects.toEqual('BAR');
         });
