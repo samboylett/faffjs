@@ -1,0 +1,8 @@
+node_modules
+coverage
+.stryker-tmp
+reports
+dist
+out
+package-lock.json
+yarn-error.log
