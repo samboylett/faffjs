@@ -30,12 +30,12 @@
     "jsdoc": "^3.5.5",
     "regenerator-runtime": "^0.13.1",
     "start-server-and-test": "^1.7.11",
-    "stryker": "^0.33.1",
-    "stryker-api": "^0.22.0",
-    "stryker-babel-transpiler": "^0.7.10",
-    "stryker-html-reporter": "^0.16.9",
-    "stryker-javascript-mutator": "^0.12.1",
-    "stryker-jest-runner": "^1.2.9"
+    "stryker": "^0.35.1",
+    "stryker-api": "^0.24.1",
+    "stryker-babel-transpiler": "^0.10.1",
+    "stryker-html-reporter": "^0.18.1",
+    "stryker-javascript-mutator": "^0.14.1",
+    "stryker-jest-runner": "^1.4.1"
   },
   "jest": {
     "moduleNameMapper": {
