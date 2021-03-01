@@ -2,6 +2,7 @@ import FaffBaseError from './FaffBaseError';
 
 /**
  * Thrown when an action key has already been defined.
+ * @memberof module:Errors
  */
 class FaffCallAlreadyDefinedError extends FaffBaseError {
     /**

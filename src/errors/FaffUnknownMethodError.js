@@ -2,6 +2,7 @@ import FaffBaseError from './FaffBaseError';
 
 /**
  * Thrown when a dispatch is made to an unknown action.
+ * @memberof module:Errors
  */
 class FaffUnknownMethodError extends FaffBaseError {
     /**
