@@ -73,11 +73,11 @@ faff.add('signup', {
 
     success(context, response) {
         return response.data.message;
-    }
+    },
 
     error(context, error) {
         return error.response.data.errors;
-    }
+    },
 });
 ```
 
@@ -208,7 +208,11 @@ import { FaffVuex } from 'faffjs';
 
 const faff = new FaffVuex();
 
-// add actions
+faff.add('foo', {
+    request(context) {
+        // You can access Vuex methods via context.store
+    },
+});
 
 export default faff;
 ```
