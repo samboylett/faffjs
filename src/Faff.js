@@ -21,11 +21,25 @@ class FaffJS {
         const events = new EventEmitter();
 
         this.actions = {};
-        this.loadingCount = 0;
+        this._loadingCount = 0;
 
         Object.defineProperty(this, 'events', {
             get() {
                 return events;
+            },
+        });
+
+        Object.defineProperty(this, 'loadingCount', {
+            get() {
+                return this._loadingCount;
+            },
+
+            set(concurrent) {
+                this._loadingCount = concurrent;
+
+                this.events.emit('loadingUpdate', {
+                    concurrent,
+                });
             },
         });
     }
