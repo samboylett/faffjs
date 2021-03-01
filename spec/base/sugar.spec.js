@@ -1,7 +1,7 @@
 import FaffJS, {
     FaffRequestController,
     errors,
-} from '../src/index';
+} from '../../src/index';
 
 describe('sugar', () => {
     let faff;

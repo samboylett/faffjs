@@ -3,7 +3,7 @@ import EventEmitter from 'events';
 import FaffJS, {
     errors,
     FaffContext,
-} from '../src/index';
+} from '../../src/index';
 
 describe('FaffJS', () => {
     let faff;

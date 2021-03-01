@@ -3,10 +3,10 @@ import EventEmitter from 'events';
 import {
     FaffCallAlreadyDefinedError,
     FaffUnknownMethodError,
-} from './errors/index';
+} from '../errors/index';
 
-import FaffContext from './FaffContext';
-import FaffRequestController from './FaffRequestController';
+import FaffContext from '../FaffContext';
+import FaffRequestController from '../FaffRequestController';
 
 /**
  * Main class.
