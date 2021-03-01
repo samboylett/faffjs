@@ -1,5 +1,6 @@
 import FaffJS, {
     FaffRequestController,
+    errors,
 } from '../src/index';
 
 describe('sugar', () => {
@@ -52,6 +53,18 @@ describe('sugar', () => {
         it('rejects to the expected value', async() => {
             await expect(faff.dispatch('foobar'))
                 .rejects.toEqual('rabfoo');
+        });
+    });
+
+    describe('when request not overridden', () => {
+        class BasicRequest extends FaffRequestController {}
+
+        beforeEach(() => {
+            faff.add('foobar', BasicRequest);
+        });
+
+        it('throws when called', async () => {
+            await expect(faff.dispatch('foobar')).rejects.toEqual(new errors.FaffArgumentError('request must be overridden'));
         });
     });
 

@@ -1,3 +1,5 @@
+import { FaffArgumentError } from './errors/index';
+
 /**
  * Action options.
  *
@@ -40,7 +42,7 @@ class FaffRequestController {
          * @returns {Promise<any>}
          */
         request(...args) {
-            throw new Error('request must be overridden');
+            throw new FaffArgumentError('request must be overridden');
         }
 
         /**
