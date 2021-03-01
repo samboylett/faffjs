@@ -138,18 +138,22 @@ class FaffJS {
     /**
      * Dispatch a new action request.
      *
+     * @private
      * @param {string} key
      * @param {any} params
+     * @param {object} options
      * @returns {any}
      */
-    async dispatch(key, params = null) {
+    async dispatchWithOptions(key, params, {
+        context = new FaffContext(this, params),
+    } = {}) {
+
         const Controller = this.actions[key];
 
         if (!Controller) {
             throw new FaffUnknownMethodError({ key });
         }
 
-        const context = new FaffContext(this, params);
         const controller = new Controller();
         const eventParams = {
             key,
@@ -175,6 +179,17 @@ class FaffJS {
         return await this.emitAround('Success', eventParams, async() => {
             return await controller.success(context, response);
         });
+    }
+
+    /**
+     * Dispatch a new action request.
+     *
+     * @param {string} key
+     * @param {any} params
+     * @returns {any}
+     */
+    async dispatch(key, params = null) {
+        return await this.dispatchWithOptions(key, params);
     }
 }
 
