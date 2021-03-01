@@ -24,16 +24,34 @@ class FaffJS {
         this.actions = {};
 
         Object.defineProperty(this, 'events', {
+            /**
+             * Get the event emitter instance.
+             *
+             * @ignore
+             * @returns {EventEmitter}
+             */
             get() {
                 return events;
             },
         });
 
         Object.defineProperty(this, 'loadingCount', {
+            /**
+             * Get the loading count.
+             *
+             * @ignore
+             * @returns {number}
+             */
             get() {
                 return loadingCount;
             },
 
+            /**
+             * Set the loading count.
+             *
+             * @ignore
+             * @param {number} concurrent
+             */
             set(concurrent) {
                 loadingCount = concurrent;
 
@@ -140,23 +158,21 @@ class FaffJS {
         };
         let response;
 
-        this.events.emit('beforeRequest', eventParams);
-
         try {
-            await this.emitAround('Request', eventParams, async () => {
+            await this.emitAround('Request', eventParams, async() => {
                 response = await controller.request(context, params);
             });
         } catch(e) {
             context.error = e;
 
-            await this.emitAround('Error', eventParams, async () => {
+            await this.emitAround('Error', eventParams, async() => {
                 throw controller.error(context, context.error);
             });
         }
 
         context.response = response;
 
-        return await this.emitAround('Success', eventParams, async () => {
+        return await this.emitAround('Success', eventParams, async() => {
             return await controller.success(context, response);
         });
     }

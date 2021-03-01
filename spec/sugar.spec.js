@@ -63,7 +63,7 @@ describe('sugar', () => {
             faff.add('foobar', BasicRequest);
         });
 
-        it('throws when called', async () => {
+        it('throws when called', async() => {
             await expect(faff.dispatch('foobar')).rejects.toEqual(new errors.FaffArgumentError('request must be overridden'));
         });
     });

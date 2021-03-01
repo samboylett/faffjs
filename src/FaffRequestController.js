@@ -20,7 +20,7 @@ class FaffRequestController {
      * @returns {object}
      */
     static build({ request, success = null, error = null }) {
-        const klass = class extends FaffRequestController {}
+        const klass = class extends FaffRequestController {};
 
         klass.prototype.request = request;
 
@@ -36,12 +36,11 @@ class FaffRequestController {
     }
 
         /**
-         * Perform the request.
+         * Perform the request. This must be overridden.
          *
-         * @param {any[]} ...args
-         * @returns {Promise<any>}
+         * @throws {FaffArgumentError}
          */
-        request(...args) {
+        request() {
             throw new FaffArgumentError('request must be overridden');
         }
 
