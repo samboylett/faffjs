@@ -19,9 +19,9 @@ class FaffJS {
      */
     constructor() {
         const events = new EventEmitter();
+        let loadingCount = 0;
 
         this.actions = {};
-        this._loadingCount = 0;
 
         Object.defineProperty(this, 'events', {
             get() {
@@ -31,11 +31,11 @@ class FaffJS {
 
         Object.defineProperty(this, 'loadingCount', {
             get() {
-                return this._loadingCount;
+                return loadingCount;
             },
 
             set(concurrent) {
-                this._loadingCount = concurrent;
+                loadingCount = concurrent;
 
                 this.events.emit('loadingUpdate', {
                     concurrent,
