@@ -9,7 +9,7 @@ import FaffRequestController from './FaffRequestController';
 /**
  * Main class.
  */
-export default class FaffJS {
+class FaffJS {
     /**
      * Constructor.
      */
@@ -103,3 +103,5 @@ export default class FaffJS {
         return controller.success(context, response);
     }
 }
+
+export default FaffJS;

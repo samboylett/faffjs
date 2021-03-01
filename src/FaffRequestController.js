@@ -10,7 +10,7 @@
 /**
  * Base class all Faff controllers should extend.
  */
-export default class FaffRequestController {
+class FaffRequestController {
     /**
      * Build a basic controller based on the supplied functions.
      *
@@ -19,37 +19,19 @@ export default class FaffRequestController {
      */
     static build({ request, success = null, error = null }) {
         return class extends FaffRequestController {
-            /**
-             * Perform the request.
-             *
-             * @param {any[]} ...args
-             * @returns {Promise<any>}
-             */
             request(...args) {
                 return request(...args);
             }
 
-            /**
-             * Perform the success parse.
-             *
-             * @param {object} context
-             * @param {any} response
-             * @returns {Promise<any>}
-             */
             success(context, response) {
                 return success ? success(context, response) : response;
             }
 
-            /**
-             * Perform the error parse.
-             *
-             * @param {object} context
-             * @param {any} response
-             * @returns {Promise<any>}
-             */
             error(context, response) {
                 return error ? error(context, response) : response;
             }
         };
     }
 }
+
+export default FaffRequestController;

@@ -1,7 +1,7 @@
 /**
  * Context class passed to action methods.
  */
-export default class FaffContext {
+class FaffContext {
     /**
      * Constructor.
      *
@@ -33,3 +33,5 @@ export default class FaffContext {
         return this.faff.dispatch(...args);
     }
 }
+
+export default FaffContext;

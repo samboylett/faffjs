@@ -3,7 +3,7 @@ import FaffBaseError from './FaffBaseError';
 /**
  * Thrown when an action key has already been defined.
  */
-export default class FaffCallAlreadyDefinedError extends FaffBaseError {
+class FaffCallAlreadyDefinedError extends FaffBaseError {
     /**
      * Constructor.
      *
@@ -14,3 +14,5 @@ export default class FaffCallAlreadyDefinedError extends FaffBaseError {
         super(`Call key alredy defined: ${ key }`);
     }
 }
+
+export default FaffCallAlreadyDefinedError;

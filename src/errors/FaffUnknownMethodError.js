@@ -3,7 +3,7 @@ import FaffBaseError from './FaffBaseError';
 /**
  * Thrown when a dispatch is made to an unknown action.
  */
-export default class FaffUnknownMethodError extends FaffBaseError {
+class FaffUnknownMethodError extends FaffBaseError {
     /**
      * Constructor.
      *
@@ -14,3 +14,5 @@ export default class FaffUnknownMethodError extends FaffBaseError {
         super(`Unknown method key: ${ key }`);
     }
 }
+
+export default FaffUnknownMethodError;
