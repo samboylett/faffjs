@@ -1,3 +1,5 @@
+import EventEmitter from 'events';
+
 import FaffJS, {
     errors,
     FaffContext,
@@ -32,6 +34,18 @@ describe('FaffJS', () => {
             requestFn = jest.fn().mockReturnValue(requestFnPromise);
             errorFn = jest.fn().mockReturnValue('errorValue');
             successFn = jest.fn().mockReturnValue('successValue');
+        });
+
+        describe('events', () => {
+            it('is an instance of EventEmitter', () => {
+                expect(faff.events).toEqual(expect.any(EventEmitter));
+            });
+
+            it('is not writable', () => {
+                expect(() => {
+                    faff.events = {};
+                }).toThrow();
+            });
         });
 
         describe('requestAdapter', () => {

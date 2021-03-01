@@ -1,3 +1,5 @@
+import EventEmitter from 'events';
+
 import {
     FaffCallAlreadyDefinedError,
     FaffUnknownMethodError,
@@ -14,8 +16,16 @@ class FaffJS {
      * Constructor.
      */
     constructor() {
+        const events = new EventEmitter();
+
         this.actions = {};
         this.loadingCount = 0;
+
+        Object.defineProperty(this, 'events', {
+            get() {
+                return events;
+            },
+        });
     }
 
     /**
