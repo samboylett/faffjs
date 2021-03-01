@@ -36,7 +36,9 @@
     "stryker-babel-transpiler": "^0.10.1",
     "stryker-html-reporter": "^0.18.1",
     "stryker-javascript-mutator": "^0.14.1",
-    "stryker-jest-runner": "^1.4.1"
+    "stryker-jest-runner": "^1.4.1",
+    "vue": "^2.6.12",
+    "vuex": "^3.6.2"
   },
   "jest": {
     "moduleNameMapper": {
