@@ -193,3 +193,42 @@ apps loading state.
 ## Full API Docs
 
 [Full API spec can be seen here](https://faffjs.netlify.app)
+
+# Modules
+
+## Vuex Store
+
+You can install FaffJS directly into your Vuex Store as a namespaced module. To
+do this you should instead import `FaffVuex` which implements a `toModule`
+method.
+
+In your faff file:
+```javascript
+import { FaffVuex } from 'faffjs';
+
+const faff = new FaffVuex();
+
+// add actions
+
+export default faff;
+```
+
+In your store file:
+```javascript
+import Vuex from 'vuex';
+import faff from './path/to/your/faff';
+
+export default new Vuex.Store({
+    modules: {
+        faff: faff.toModule(),
+    },
+});
+```
+
+You can then use the actions directly from Vuex:
+```javascript
+this.$store.dispatch('faff/foo', /* your params */);
+```
+
+Actions called via Vuex will have a `store` included in the `context`, which is
+the Vuex action context.

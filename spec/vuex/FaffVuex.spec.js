@@ -15,7 +15,10 @@ describe('FaffVuex', () => {
     let errorFn;
     let successFn;
 
-    const context = expect.any(FaffContext);
+    const anyContext = expect.any(FaffContext);
+    const storeContext = expect.objectContaining({
+        store: expect.any(Object),
+    });
 
     it('is instantiable', () => {
         faff = new FaffVuex();
@@ -96,7 +99,7 @@ describe('FaffVuex', () => {
                     });
 
                     it('calls success function with the value', async() => {
-                        expect(successFn).toHaveBeenCalledWith(context, 'c');
+                        expect(successFn).toHaveBeenCalledWith(anyContext, 'c');
                     });
 
                     it('returned promise resolves with the success function return value', async() => {
@@ -116,7 +119,7 @@ describe('FaffVuex', () => {
                     });
 
                     it('calls error function with the value', async() => {
-                        expect(errorFn).toHaveBeenCalledWith(context, 'd');
+                        expect(errorFn).toHaveBeenCalledWith(anyContext, 'd');
                     });
 
                     it('returned promise rejects with the error function return value', async() => {
@@ -141,7 +144,11 @@ describe('FaffVuex', () => {
                 });
 
                 it('calls the request function with context and argument as null', () => {
-                    expect(requestFn).toHaveBeenCalledWith(context, null);
+                    expect(requestFn).toHaveBeenCalledWith(anyContext, null);
+                });
+
+                it('calls the request function with store in the context', () => {
+                    expect(requestFn).toHaveBeenCalledWith(storeContext, null);
                 });
 
                 allFunctionTests();
@@ -153,7 +160,11 @@ describe('FaffVuex', () => {
                 });
 
                 it('calls the request function with context and argument', () => {
-                    expect(requestFn).toHaveBeenCalledWith(context, 'test');
+                    expect(requestFn).toHaveBeenCalledWith(anyContext, 'test');
+                });
+
+                it('calls the request function with store in the context', () => {
+                    expect(requestFn).toHaveBeenCalledWith(storeContext, expect.any(String));
                 });
 
                 allFunctionTests();

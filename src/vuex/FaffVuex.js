@@ -53,7 +53,7 @@ class FaffVuex extends FaffJS {
         Object.keys(this.actions).forEach(key => {
             actions[key] = async(storeContext, params = null) => {
                 const context = new FaffContext(this, params);
-                context.$store = storeContext;
+                context.store = storeContext;
 
                 try {
                     storeContext.commit('increaseLoading');
