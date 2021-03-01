@@ -35,36 +35,36 @@ class FaffRequestController {
         return klass;
     }
 
-        /**
-         * Perform the request. This must be overridden.
-         *
-         * @throws {FaffArgumentError}
-         */
-        request() {
-            throw new FaffArgumentError('request must be overridden');
-        }
+    /**
+     * Perform the request. This must be overridden.
+     *
+     * @throws {FaffArgumentError}
+     */
+    request() {
+        throw new FaffArgumentError('request must be overridden');
+    }
 
-        /**
-         * Perform the success parse.
-         *
-         * @param {object} context
-         * @param {any} response
-         * @returns {any}
-         */
-        success(context, response) {
-            return response;
-        }
+    /**
+     * Perform the success parse.
+     *
+     * @param {object} context
+     * @param {any} response
+     * @returns {any}
+     */
+    success(context, response) {
+        return response;
+    }
 
-        /**
-         * Perform the error parse.
-         *
-         * @param {object} context
-         * @param {any} response
-         * @returns {any}
-         */
-        error(context, response) {
-            return response;
-        }
+    /**
+     * Perform the error parse.
+     *
+     * @param {object} context
+     * @param {any} response
+     * @returns {any}
+     */
+    error(context, response) {
+        return response;
+    }
 }
 
 export default FaffRequestController;
