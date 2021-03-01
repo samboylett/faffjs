@@ -147,7 +147,6 @@ class FaffJS {
     async dispatchWithOptions(key, params, {
         context = new FaffContext(this, params),
     } = {}) {
-
         const Controller = this.actions[key];
 
         if (!Controller) {

@@ -25,21 +25,47 @@ class FaffVuex extends FaffJS {
         namespaced = true,
     } = {}) {
         const actions = {};
+        const state = () => ({
+            loadingCount: 0,
+        });
+        const mutations = {
+            increaseLoading: (state) => {
+                state.loadingCount++;
+            },
+
+            decreaseLoading: (state) => {
+                state.loadingCount--;
+            },
+        };
+        const getters = {
+            loading: state => {
+                return state.loadingCount > 0;
+            },
+        };
 
         Object.keys(this.actions).forEach(key => {
-            actions[key] = (storeContext, params = null) => {
+            actions[key] = async(storeContext, params = null) => {
                 const context = new FaffContext(this, params);
                 context.$store = storeContext;
 
-                return this.dispatchWithOptions(key, params, {
-                    context,
-                });
+                try {
+                    storeContext.commit('increaseLoading');
+
+                    return await this.dispatchWithOptions(key, params, {
+                        context,
+                    });
+                } finally {
+                    storeContext.commit('decreaseLoading');
+                }
             };
         });
 
         return {
             namespaced,
             actions,
+            state,
+            mutations,
+            getters,
         };
     }
 }

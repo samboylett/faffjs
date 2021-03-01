@@ -1,13 +1,11 @@
 import EventEmitter from 'events';
 import Vuex from 'vuex';
-import Vue from 'vue';
+import { createLocalVue } from '@vue/test-utils';
 
 import FaffJS, {
     FaffVuex,
     FaffContext,
 } from '../../src/index';
-
-Vue.use(Vuex);
 
 describe('FaffVuex', () => {
     let faff;
@@ -46,8 +44,10 @@ describe('FaffVuex', () => {
 
         describe('store module', () => {
             let store;
+            let vm;
             let faffModule;
             let retVal;
+            let LocalVue;
 
             beforeEach(() => {
                 faff.add('foo', {
@@ -56,15 +56,37 @@ describe('FaffVuex', () => {
                     error: errorFn,
                 });
 
+                LocalVue = createLocalVue();
+
+                LocalVue.use(Vuex);
+
                 faffModule = faff.toModule();
                 store = new Vuex.Store({
                     modules: {
                         faff: faffModule,
                     },
                 });
+
+                vm = new LocalVue({
+                    store,
+                });
+            });
+
+            afterEach(async() => {
+                requestFnResolve();
+
+                try {
+                    await retVal;
+                } catch(e) {
+                    // do nothing
+                }
             });
 
             const allFunctionTests = () => {
+                it('sets loading to true', async () => {
+                    expect(vm.$store.getters['faff/loading']).toBe(true);
+                });
+
                 it('returns a promise', () => {
                     expect(retVal).toEqual(expect.any(Promise));
                 });
@@ -81,6 +103,12 @@ describe('FaffVuex', () => {
                     it('returned promise resolves with the success function return value', async() => {
                         await expect(retVal).resolves.toBe('successValue');
                     });
+
+                    it('sets loading to false', async () => {
+                        await retVal;
+
+                        expect(vm.$store.getters['faff/loading']).toBe(false);
+                    });
                 });
 
                 describe('when request function rejects', () => {
@@ -94,6 +122,16 @@ describe('FaffVuex', () => {
 
                     it('returned promise rejects with the error function return value', async() => {
                         await expect(retVal).rejects.toBe('errorValue');
+                    });
+
+                    it('sets loading to false', async () => {
+                        try {
+                            await retVal;
+                        } catch(e) {
+                            // do nothing
+                        }
+
+                        expect(vm.$store.getters['faff/loading']).toBe(false);
                     });
                 });
             };
