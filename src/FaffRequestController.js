@@ -18,20 +18,52 @@ class FaffRequestController {
      * @returns {object}
      */
     static build({ request, success = null, error = null }) {
-        return class extends FaffRequestController {
-            request(...args) {
-                return request(...args);
-            }
+        const klass = class extends FaffRequestController {}
 
-            success(context, response) {
-                return success ? success(context, response) : response;
-            }
+        klass.prototype.request = request;
 
-            error(context, response) {
-                return error ? error(context, response) : response;
-            }
-        };
+        if (success) {
+            klass.prototype.success = success;
+        }
+
+        if (error) {
+            klass.prototype.error = error;
+        }
+
+        return klass;
     }
+
+        /**
+         * Perform the request.
+         *
+         * @param {any[]} ...args
+         * @returns {Promise<any>}
+         */
+        request(...args) {
+            throw new Error('request must be overridden');
+        }
+
+        /**
+         * Perform the success parse.
+         *
+         * @param {object} context
+         * @param {any} response
+         * @returns {any}
+         */
+        success(context, response) {
+            return response;
+        }
+
+        /**
+         * Perform the error parse.
+         *
+         * @param {object} context
+         * @param {any} response
+         * @returns {any}
+         */
+        error(context, response) {
+            return response;
+        }
 }
 
 export default FaffRequestController;
