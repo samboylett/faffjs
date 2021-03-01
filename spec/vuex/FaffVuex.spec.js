@@ -1,4 +1,3 @@
-import EventEmitter from 'events';
 import Vuex from 'vuex';
 import { createLocalVue } from '@vue/test-utils';
 
@@ -83,7 +82,7 @@ describe('FaffVuex', () => {
             });
 
             const allFunctionTests = () => {
-                it('sets loading to true', async () => {
+                it('sets loading to true', async() => {
                     expect(vm.$store.getters['faff/loading']).toBe(true);
                 });
 
@@ -104,7 +103,7 @@ describe('FaffVuex', () => {
                         await expect(retVal).resolves.toBe('successValue');
                     });
 
-                    it('sets loading to false', async () => {
+                    it('sets loading to false', async() => {
                         await retVal;
 
                         expect(vm.$store.getters['faff/loading']).toBe(false);
@@ -124,7 +123,7 @@ describe('FaffVuex', () => {
                         await expect(retVal).rejects.toBe('errorValue');
                     });
 
-                    it('sets loading to false', async () => {
+                    it('sets loading to false', async() => {
                         try {
                             await retVal;
                         } catch(e) {

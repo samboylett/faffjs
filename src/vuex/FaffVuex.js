@@ -25,6 +25,13 @@ class FaffVuex extends FaffJS {
         namespaced = true,
     } = {}) {
         const actions = {};
+
+        /**
+         * Get the module default state.
+         *
+         * @ignore
+         * @returns {object}
+         */
         const state = () => ({
             loadingCount: 0,
         });
