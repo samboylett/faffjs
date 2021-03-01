@@ -10,6 +10,8 @@ import FaffRequestController from './FaffRequestController';
 
 /**
  * Main class.
+ *
+ * @property {EventEmitter} events - Object where class events are emitted.
  */
 class FaffJS {
     /**
@@ -83,6 +85,25 @@ class FaffJS {
     }
 
     /**
+     * Emit events around a function call.
+     *
+     * @private
+     * @param {string} name
+     * @param {any} eventParams
+     * @param {function} call
+     * @returns {any}
+     */
+    async emitAround(name, eventParams, call) {
+        this.events.emit(`before${ name }`, eventParams);
+
+        try {
+            return await call();
+        } finally {
+            this.events.emit(`after${ name }`, eventParams);
+        }
+    }
+
+    /**
      * Dispatch a new action request.
      *
      * @param {string} key
@@ -98,19 +119,32 @@ class FaffJS {
 
         const context = new FaffContext(this, params);
         const controller = new Controller();
+        const eventParams = {
+            key,
+            params,
+            context,
+        };
         let response;
 
+        this.events.emit('beforeRequest', eventParams);
+
         try {
-            response = await controller.request(context, params);
+            await this.emitAround('Request', eventParams, async () => {
+                response = await controller.request(context, params);
+            });
         } catch(e) {
             context.error = e;
 
-            throw controller.error(context, e);
+            await this.emitAround('Error', eventParams, async () => {
+                throw controller.error(context, context.error);
+            });
         }
 
         context.response = response;
 
-        return controller.success(context, response);
+        return await this.emitAround('Success', eventParams, async () => {
+            return await controller.success(context, response);
+        });
     }
 }
 
